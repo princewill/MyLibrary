@@ -1,13 +1,24 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{BaseController, ControllerComponents, ControllerHelpers}
+import model.Book
+import services.BookService
+import play.api.mvc.{Action, BaseController, ControllerComponents, ControllerHelpers}
+
+import scala.concurrent.Future
 
 
 @Singleton
-class MyBook @Inject()(val controllerComponents: ControllerComponents) extends BaseController with ControllerHelpers {
+class MyBook @Inject()(implicit val controllerComponents: ControllerComponents, bookService: BookService) extends BaseController with ControllerHelpers {
 
-  def addBook
+  def addBook(): Action[Book] = Action.async(jsonBodyParser[Book]) { implicit request =>
+    val book = request.body
+
+
+  }
+
+
+
   def addBooks
   def getBooks
   def getBook
