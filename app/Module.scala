@@ -1,9 +1,8 @@
 import com.google.inject.AbstractModule
-import services.BookService
+import model.services.BookService
 
-class Module {
   class Module extends AbstractModule {
 
     override def configure() = {
     }
-}
+

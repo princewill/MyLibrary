@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 import model.Book
-import services.BookService
+import model.services.BookService
 import play.api.mvc.{Action, BaseController, ControllerComponents, ControllerHelpers}
 
 import scala.concurrent.Future
