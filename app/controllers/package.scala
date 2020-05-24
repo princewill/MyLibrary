@@ -1,16 +1,28 @@
-import play.api.libs.json.{JsError, JsSuccess, Reads}
-import play.api.mvc.{BodyParser, ControllerComponents}
+import model.Genre
+import play.api.libs.json.Reads
+import model.Genre.Autobiography
+import model.utils.JsonReadsHelpers
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-import scala.concurrent.ExecutionContext
 
 package object controllers {
-  implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  def jsonBodyParser[T](implicit reads: Reads[T], controllerComponents: ControllerComponents): BodyParser[T] =
-    controllerComponents.parsers.tolerantJson.map { json =>
-      json.validate[T] match {
-        case JsSuccess(value, _) => value
-        case jsError: JsError => throw new Exception(jsError.toString)
-      }
-    }
+  final case class Book(name: String, author: String, genre: Genre, isAudioBook: Boolean)
+
+  final case class Books(books: Seq[Books])
+
+  object Book {
+
+    implicit val reads: Reads[Book] = (
+      (__ \ "bookName").read[String](JsonReadsHelpers.NonEmptyString) and
+        (__ \ "bookAuthor").read[String](JsonReadsHelpers.NonEmptyString) and
+        (__ \ "bookGenre").readWithDefault[Genre](Autobiography) and
+        (__ \ "isAudioBook").readWithDefault[Boolean](defaultValue = false)
+      )(Book.apply _)
+
+    implicit val writes: Writes[Book] = Json.writes[Book]
+
+  }
+
 }

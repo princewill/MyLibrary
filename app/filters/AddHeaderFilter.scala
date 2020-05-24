@@ -9,9 +9,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AddHeaderFilter @Inject()(implicit override val mat: Materializer, ec: ExecutionContext) extends Filter {
 
+  //TODO: add cors headers
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
-      result.withHeaders("X-ExampleFilter" -> "foo")
+      result.withHeaders("" -> "")
     }
   }
 
