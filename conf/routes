@@ -8,3 +8,11 @@ GET     /                           controllers.HomeController.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+## routes for books api service calls
+POST            /ws/books/add           controllers.MyBook.addBook
+#GET             /ws/books               controllers.MyBook.getBooks
+#GET             /ws/books/:id           controllers.MyBook.getBook(id: Long)
+#PUT             /ws/books/update        controllers.MyBook.updateBook
+#DELETE          /ws/Books/delete/:id    controller.MyBook.Delete(id: Long)
+# DELETE        /ws/Books/Delete        controller.MyBook.DeleteBooks
