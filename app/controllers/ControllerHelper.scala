@@ -7,6 +7,7 @@ import scala.concurrent.ExecutionContext
 
 trait ControllerHelper {
 
+  //TODO create better exception handler
   def jsonBodyParser[T](implicit reads: Reads[T], controllerComponents: ControllerComponents, ec: ExecutionContext): BodyParser[T] =
     controllerComponents.parsers.tolerantJson.map { json =>
       json.validate[T] match {
