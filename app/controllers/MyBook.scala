@@ -3,21 +3,32 @@ package controllers
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import model.BookInfo
-import model.services.BookService
 import play.api.libs.json.Json
 import play.api.mvc.{Action, BaseController, ControllerComponents}
-import scala.concurrent.ExecutionContext.Implicits._
+
+import scala.concurrent.{ExecutionContext, Future}
+import model.BookInfo
+import model.services.BookService
+
+import scala.util.{Failure, Success, Try}
 
 
 @Singleton
-class MyBook @Inject()(implicit val controllerComponents: ControllerComponents, bookService: BookService) extends BaseController with ControllerHelper {
+class MyBook @Inject()(
+  bookService: BookService
+)(implicit val ec: ExecutionContext,
+  val controllerComponents: ControllerComponents
+) extends BaseController with ControllerHelper {
+
 
   def addBook(): Action[Book] = Action.async(jsonBodyParser[Book]) { implicit request =>
     val book = request.body
     val bookInfo = BookInfo(UUID.randomUUID().toString, book)
 
-    bookService.addBooks(bookInfo).map(bookInfo => Ok(Json.toJson(bookInfo)))
+    Try { bookService.addBooks(bookInfo) } match {
+      case Success(value) => value.map{ bookId => Created(Json.toJson(bookId)) }
+      case Failure(_) => Future.failed(new Exception("Request failed!"))
+    }
   }
 
 

@@ -15,4 +15,4 @@ POST            /ws/books/add           controllers.MyBook.addBook
 #GET             /ws/books/:id           controllers.MyBook.getBook(id: Long)
 #PUT             /ws/books/update        controllers.MyBook.updateBook
 #DELETE          /ws/Books/delete/:id    controller.MyBook.Delete(id: Long)
-# DELETE         /ws/Books/Delete        controller.MyBook.DeleteBooks
+#DELETE         /ws/Books/Delete        controller.MyBook.DeleteBooks
