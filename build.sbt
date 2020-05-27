@@ -30,7 +30,8 @@ libraryDependencies ++= Seq(
   // TEST
   //"org.scalatest"              %% "scalatest"                 % "3.0.5"          % Test,
   "org.mockito"                % "mockito-core"               % "1.9.5"          % Test,
-  specs2 % Test,
+
+  specs2                                                                         % Test,
 
   "ru.yandex.qatools.embed"    % "postgresql-embedded"        % "2.9"            % "test"
 )
