@@ -4,12 +4,13 @@ import model.dao.{BookDAO, BookDAOImpl}
 import model.services.{BookService, BookServiceImpl}
 import model.utils.Logger
 import play.api.inject.Binding
-import play.api.{Configuration, Environment}
+import play.api.{ApplicationLoader, Configuration, Environment}
 
 
 class Module extends play.api.inject.Module with Logger {
 
   logger.info(message = "Application has started...")
+  ApplicationLoader
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
     bind[DbInit].toSelf.eagerly(),
