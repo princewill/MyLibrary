@@ -1,16 +1,14 @@
 package model.table
 
-import model.{BookId, BookInfo, BookTitle}
+import model.{BookId, Book, BookTitle}
 import slick.lifted.{ProvenShape, Tag}
 import slick.jdbc.H2Profile.api._
-
-
 
 case class DbBook(bookId: BookId, title: BookTitle, author: String, genre: String, isAudioBook: Boolean, isFiction: Boolean)
 
 object DbBook{
-  def _apply(bookInfo: BookInfo): DbBook =
-    DbBook(bookInfo.id, bookInfo.book.title, bookInfo.book.author, bookInfo.book.genre.genreString, bookInfo.book.isAudioBook, bookInfo.book.genre.isFiction)
+  def _apply(book: Book): DbBook =
+    DbBook(book.id, book.bookInfo.title, book.bookInfo.author, book.bookInfo.genre.genreString, book.bookInfo.isAudioBook, book.bookInfo.genre.isFiction)
 }
 
 
