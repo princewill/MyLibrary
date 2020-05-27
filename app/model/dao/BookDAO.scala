@@ -3,7 +3,7 @@ package model.dao
 import javax.inject.Inject
 import model.{Book, BookId, BookTitle}
 import model.table.{BookTable, DbBook}
-import model.utils.ErrorException
+import model.utils.{DatabaseExecutionContext, ErrorException}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.db.NamedDatabase
 import play.api.mvc.Results.BadRequest
@@ -11,7 +11,6 @@ import slick.jdbc.JdbcProfile
 import slick.lifted.TableQuery
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 trait BookDAO {
@@ -27,7 +26,7 @@ trait BookDAO {
 
 class BookDAOImpl @Inject()(
  @NamedDatabase("books") protected val dbConfigProvider: DatabaseConfigProvider
-)(implicit ec: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] with BookDAO {
+)(implicit ec: DatabaseExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] with BookDAO {
   import BookDAOImpl._
 
   def save(book: Book): Future[BookId] =

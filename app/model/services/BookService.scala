@@ -3,7 +3,7 @@ package model.services
 import javax.inject.Inject
 import model.{Book, BookId, Books}
 import model.dao.BookDAO
-import model.utils.ErrorException
+import model.utils.{DatabaseExecutionContext, ErrorException}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -25,7 +25,7 @@ trait BookService {
 
 }
 
-class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: ExecutionContext) extends BookService {
+class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: DatabaseExecutionContext) extends BookService {
 
   def addBook(book: Book): Future[BookId] = bookDAO.save(book)
 

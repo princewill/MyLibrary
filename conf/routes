@@ -17,4 +17,4 @@ DELETE          /ws/books/delete/:id    controllers.MyBook.deleteBook(id: String
 
 ##TODO: implement
 #PUT             /ws/books/update        controllers.MyBook.updateBook
-#DELETE         /ws/Books/Delete        controller.MyBook.DeleteBooks
+#DELETE          /ws/Books/Delete        controller.MyBook.DeleteBooks
