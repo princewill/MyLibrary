@@ -10,33 +10,33 @@ sealed trait Genre {
 
 object Genre {
 
-  case object Romance extends Genre { val genreString = "romance"; val isFiction = true }
+  object Romance extends Genre { val genreString = "romance"; val isFiction = true }
 
-  case object Crime extends Genre { val genreString = "crime"; val isFiction = true }
+  object Crime extends Genre { val genreString = "crime"; val isFiction = true }
 
-  case object Drama extends Genre { val genreString = "drama"; val isFiction = true }
+  object Drama extends Genre { val genreString = "drama"; val isFiction = true }
 
-  case object Comic extends Genre { val genreString = "comic"; val isFiction = true }
+  object Comic extends Genre { val genreString = "comic"; val isFiction = true }
 
-  case object Fantasy extends Genre { val genreString = "fantasy"; val isFiction = true }
+  object Fantasy extends Genre { val genreString = "fantasy"; val isFiction = true }
 
-  case object SciFi extends Genre { val genreString = "scifi"; val isFiction = true }
+  object SciFi extends Genre { val genreString = "scifi"; val isFiction = true }
 
-  case object Thriller extends Genre { val genreString = "thriller"; val isFiction = true }
+  object Thriller extends Genre { val genreString = "thriller"; val isFiction = true }
 
-  case object Horror extends Genre { val genreString = "horror"; val isFiction = true }
+  object Horror extends Genre { val genreString = "horror"; val isFiction = true }
 
-  case object TODO extends Genre { val genreString = "todo"; val isFiction = true }
+  object TODO extends Genre { val genreString = "todo"; val isFiction = true }
 
-  case object Religion extends Genre { val genreString = "religion"; val isFiction = false }
+  object Religion extends Genre { val genreString = "religion"; val isFiction = false }
 
-  case object Science extends Genre { val genreString = "science"; val isFiction = false }
+  object Science extends Genre { val genreString = "science"; val isFiction = false }
 
-  case object History extends Genre { val genreString = "history"; val isFiction = false }
+  object History extends Genre { val genreString = "history"; val isFiction = false }
 
-  case object Autobiography extends Genre { val genreString = "autobiography"; val isFiction = false }
+  object Autobiography extends Genre { val genreString = "autobiography"; val isFiction = false }
 
-  case object TextBook extends Genre { val genreString = "textbook"; val isFiction = false }
+  object TextBook extends Genre { val genreString = "textbook"; val isFiction = false }
 
 
   implicit val reads: Reads[Genre] = __.read[String](JsonReadsHelpers.NonEmptyString).map(str => Genre(str.toLowerCase))

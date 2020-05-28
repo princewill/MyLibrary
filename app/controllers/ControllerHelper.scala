@@ -14,14 +14,10 @@ trait ControllerHelper {
     controllerComponents.parsers.tolerantJson.map { json =>
       json.validate[T] match {
         case JsSuccess(value, _) => value
-        case jsError: JsError => {
+        case jsError: JsError =>
           val ex = ErrorException(BAD_REQUEST, jsError)
           ex.setStackTrace(Array.empty)
           throw ex
-        }
       }
     }
-
-
-
 }
