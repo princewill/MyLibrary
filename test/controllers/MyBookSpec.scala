@@ -1,34 +1,29 @@
 package controllers
 
-import model.services.BookServiceImpl
+import model.services.BookService
 import model.utils.ErrorException
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
+import org.specs2.specification.Scope
 import play.api.libs.json._
 import play.api.mvc.{AnyContentAsEmpty, Result}
-import play.api.test.{FakeRequest, PlaySpecification}
+import play.api.test.FakeRequest
 import utils.BaseSpec
 import utils.TestHelper._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class MyBookSpec extends PlaySpecification {
-  val app: Application = GuiceApplicationBuilder().configure(conf).build()
-  val bookService: BookServiceImpl = app.injector.instanceOf[BookServiceImpl]
+class MyBookSpec extends BaseSpec {
 
-  trait MyBookFixture extends BaseSpec {
+  trait MyBookFixture extends Scope {
 
-    implicit val _: MyBookFixture = this
-    implicit val ec: ExecutionContext = executionContext
-
-    val myBookController = new MyBook(bookService)
+    val myBookController: MyBook = app.injector.instanceOf[MyBook]
+    implicit val ec: ExecutionContext = controllerComponents.executionContext
     val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   }
 
   "addBook" should {
-    import utils.TestHelper.FakeRequestHelper.FakeRequestHelper
+    import utils.TestHelper.FakeRequestHelper
 
     "return 200 OK when book does not already exist in DB" in new MyBookFixture {
 

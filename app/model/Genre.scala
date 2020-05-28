@@ -44,20 +44,20 @@ object Genre {
   implicit val writes: Writes[Genre] = (value: Genre) => JsString(value.genreString)
 
   def apply(str: String): Genre = str match {
-    case Romance.genreString => Romance
-    case Crime.genreString => Crime
-    case Drama.genreString => Drama
-    case Comic.genreString => Comic
-    case Fantasy.genreString => Fantasy
-    case SciFi.genreString => SciFi
-    case Thriller.genreString => Thriller
-    case Horror.genreString => Horror
-    case Religion.genreString => Religion
-    case Science.genreString => Science
-    case History.genreString => History
+    case Romance.genreString       => Romance
+    case Crime.genreString         => Crime
+    case Drama.genreString         => Drama
+    case Comic.genreString         => Comic
+    case Fantasy.genreString       => Fantasy
+    case SciFi.genreString         => SciFi
+    case Thriller.genreString      => Thriller
+    case Horror.genreString        => Horror
+    case Religion.genreString      => Religion
+    case Science.genreString       => Science
+    case History.genreString       => History
     case Autobiography.genreString => Autobiography
-    case TextBook.genreString => TextBook
-    case _  => TODO
+    case TextBook.genreString      => TextBook
+    case _                         => TODO
   }
 
 }

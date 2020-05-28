@@ -14,14 +14,14 @@ trait TestHelperRequestsAndResponse {
   val addBookErrorResponse: JsObject =
     Json.obj(
       "fail" -> "Book Already Exists!",
-      "errorCode" -> 400,
+      "errorCode" -> "400",
       "errors" -> JsArray.empty
     )
 
   val getBookErrorResponse: JsObject =
     Json.obj(
       "fail" -> "Book Does Not Exist!",
-      "errorCode" -> 400,
+      "errorCode" -> "404",
       "errors" -> JsArray.empty
     )
 

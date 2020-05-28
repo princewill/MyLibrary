@@ -20,7 +20,6 @@ class MyBook @Inject()(
   val controllerComponents: ControllerComponents
 ) extends BaseController with ControllerHelper {
 
-
   def addBook(): Action[BookInfo] = Action.async(jsonBodyParser[BookInfo]) { implicit request =>
     val bookInfo = request.body
     val book = Book(UUID.randomUUID().toString, bookInfo)
