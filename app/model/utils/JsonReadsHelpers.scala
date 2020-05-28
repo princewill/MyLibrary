@@ -1,6 +1,6 @@
 package model.utils
 
-import play.api.libs.json.{JsError, JsString, JsSuccess, JsValue, Json, JsonValidationError, Reads}
+import play.api.libs.json.{JsonValidationError, Reads}
 
 object JsonReadsHelpers {
 

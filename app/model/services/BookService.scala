@@ -7,8 +7,7 @@ import model.utils.{DatabaseExecutionContext, ErrorException}
 
 import play.api.http.Status.NOT_FOUND
 
-import scala.concurrent.{ExecutionContext, Future}
-
+import scala.concurrent.Future
 
 trait BookService {
 
@@ -23,7 +22,6 @@ trait BookService {
   //def updateBook(book: Book): Future[Book]
 
   //def deleteAll(ids: List[BookTitle]): Future[Ack]
-
 
 }
 
