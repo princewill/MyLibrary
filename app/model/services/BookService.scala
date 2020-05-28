@@ -5,6 +5,8 @@ import model.{Book, BookId, Books}
 import model.dao.BookDAO
 import model.utils.{DatabaseExecutionContext, ErrorException}
 
+import play.api.http.Status.NOT_FOUND
+
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -35,7 +37,7 @@ class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: DatabaseExecution
   def getBook(id: BookId): Future[Book] =
     bookDAO.findById(id).map {
       case Some(dbBook) => Book(dbBook)
-      case _ => throw ErrorException(play.api.mvc.Results.BadRequest, "Book Does Not Exist!")
+      case _ => throw ErrorException(NOT_FOUND, "Book Does Not Exist!")
     }
 
   def deleteBook(id: BookId): Future[String] = bookDAO.delete(id)

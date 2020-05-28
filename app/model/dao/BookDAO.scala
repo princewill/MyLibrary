@@ -6,7 +6,7 @@ import model.table.{BookTable, DbBook}
 import model.utils.{DatabaseExecutionContext, ErrorException}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.db.NamedDatabase
-import play.api.mvc.Results.BadRequest
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, BAD_REQUEST, NOT_FOUND}
 import slick.jdbc.JdbcProfile
 import slick.lifted.TableQuery
 import slick.jdbc.H2Profile.api._
@@ -32,7 +32,7 @@ class BookDAOImpl @Inject()(
   def save(book: Book): Future[BookId] =
     checkForExists(book.bookInfo.title) { _ =>
       db.run(BookTable.insertOrUpdate(DbBook._apply(book))).map(_ => book.id).recoverWith {
-        case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+        case ex => Future.failed(ErrorException.fromThrowable(INTERNAL_SERVER_ERROR)(ex))
       }
     }
 
@@ -43,20 +43,20 @@ class BookDAOImpl @Inject()(
   def delete(bookId: BookId): Future[String] =
     checkForNonExists(bookId){ _ =>
       db.run(ById(bookId).delete).map(_ => "Book has been deleted successfully!").recoverWith {
-        case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+        case ex => Future.failed(ErrorException.fromThrowable(INTERNAL_SERVER_ERROR)(ex))
       }
     }
 
   private def checkForExists(bookTitle: BookTitle)(fe: BookId => Future[String]): Future[String] = {
     findByTitle(bookTitle).flatMap {
-      case Some(_) => Future.failed(ErrorException(BadRequest, "Book Already Exists!"))
+      case Some(_) => Future.failed(ErrorException(BAD_REQUEST, "Book Already Exists!"))
       case _ => fe(bookTitle)
     }
   }
 
   private def checkForNonExists(bookId: BookId)(fe: BookId => Future[String]): Future[String] = {
     findById(bookId).flatMap {
-      case None => Future.failed(ErrorException(BadRequest, "Book Does Not Exist!"))
+      case None => Future.failed(ErrorException(NOT_FOUND, "Book Does Not Exist!"))
       case _ => fe(bookId)
     }
   }
@@ -75,8 +75,6 @@ object BookDAOImpl {
 
   lazy val ById: BookId => Query[BookTable, DbBook, Seq] = (id: BookId) => BookTable.filter(_.bookId === id)
 
-  /*lazy val BookReturningRow =
-    BookTable returning BookTable.map(_.bookId) into { (book, id) => book.copy(bookId = id)}*/
 
 }
 
