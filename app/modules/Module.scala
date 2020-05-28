@@ -10,7 +10,6 @@ import play.api.{ApplicationLoader, Configuration, Environment}
 class Module extends play.api.inject.Module with Logger {
 
   logger.info(message = "Application has started...")
-  ApplicationLoader
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
     bind[DbInit].toSelf.eagerly(),

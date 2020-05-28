@@ -6,6 +6,8 @@ version := "1.0-SNAPSHOT"
 lazy val postgresVersion = "42.1.4"
 lazy val slickVersion = "5.0.0"
 lazy val h2Version = "1.4.196"
+lazy val akkaVersion    = "2.6.3"
+
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -27,7 +29,11 @@ libraryDependencies ++= Seq(
   //"org.scalatest"              %% "scalatest"                 % "3.0.5"          % Test,
   //"org.mockito"                % "mockito-core"               % "1.9.5"          % Test,
 
-  //specs2                                                                         % Test,
+  "com.typesafe.akka"          %% "akka-testkit"              % akkaVersion        % Test,
+  "com.typesafe.akka"          %% "akka-stream-testkit"       % akkaVersion        % Test,
+  "com.typesafe.akka"          %% "akka-stream"               % akkaVersion,
+
+  specs2                                                                           % Test,
 
 )
 
