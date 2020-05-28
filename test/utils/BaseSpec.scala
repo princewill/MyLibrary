@@ -1,6 +1,5 @@
 package utils
 
-import org.specs2.mock.mockito.MocksCreation
 import org.specs2.specification.Scope
 import play.api.i18n.{DefaultLangs, Lang}
 import play.api.mvc.{BaseControllerHelpers, ControllerComponents, DefaultActionBuilderImpl, PlayBodyParsers}
@@ -8,7 +7,7 @@ import play.api.mvc.{BaseControllerHelpers, ControllerComponents, DefaultActionB
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait BaseSpec extends ControllerComponents with BaseControllerHelpers with Scope with MocksCreation {
+trait BaseSpec extends ControllerComponents with BaseControllerHelpers with Scope {
   override val executionContext: ExecutionContext = global
   override val parsers: PlayBodyParsers = PlayBodyParsers()(TestHelper.materializer)
   override val actionBuilder = new DefaultActionBuilderImpl(parsers.default)
