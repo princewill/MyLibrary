@@ -75,6 +75,5 @@ object BookDAOImpl {
 
   lazy val ById: BookId => Query[BookTable, DbBook, Seq] = (id: BookId) => BookTable.filter(_.bookId === id)
 
-
 }
 
