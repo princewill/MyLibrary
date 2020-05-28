@@ -31,9 +31,9 @@ class BookDAOImpl @Inject()(
 
   def save(book: Book): Future[BookId] =
     checkForExists(book.bookInfo.title) { _ =>
-      db.run(BookTable.insertOrUpdate(DbBook._apply(book))).map(_ => book.id)
-    }.recoverWith {
-      case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+      db.run(BookTable.insertOrUpdate(DbBook._apply(book))).map(_ => book.id).recoverWith {
+        case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+      }
     }
 
   def findById(bookId: BookId): Future[Option[DbBook]] = db.run(ById(bookId).result.headOption)
@@ -42,9 +42,9 @@ class BookDAOImpl @Inject()(
 
   def delete(bookId: BookId): Future[String] =
     checkForNonExists(bookId){ _ =>
-      db.run(ById(bookId).delete).map(_ => "Book has been deleted successfully!")
-    }.recoverWith {
-      case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+      db.run(ById(bookId).delete).map(_ => "Book has been deleted successfully!").recoverWith {
+        case ex => Future.failed(ErrorException.fromThrowable(None)(ex))
+      }
     }
 
   private def checkForExists(bookTitle: BookTitle)(fe: BookId => Future[String]): Future[String] = {
@@ -56,7 +56,7 @@ class BookDAOImpl @Inject()(
 
   private def checkForNonExists(bookId: BookId)(fe: BookId => Future[String]): Future[String] = {
     findById(bookId).flatMap {
-      case None => Future.failed(ErrorException(BadRequest, "Book Does Not Exists!"))
+      case None => Future.failed(ErrorException(BadRequest, "Book Does Not Exist!"))
       case _ => fe(bookId)
     }
   }

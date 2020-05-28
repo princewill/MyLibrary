@@ -28,8 +28,8 @@ class ErrorException(
 object ErrorException {
 
   def apply(errorCodeStatus: Int, jsError: JsError): ErrorException = {
-    if (errorCodeStatus >= 500) new ErrorException(InternalServerError, "Service Error",  extractJsErrorMessage(jsError))
-    new ErrorException(BadRequest, "client Error")
+    if (errorCodeStatus >= 500) new ErrorException(InternalServerError, "Server Error!",  extractJsErrorMessage(jsError))
+    new ErrorException(BadRequest, "Invalid JSON POST Data")
   }
 
   def apply(status: Results#Status, message: String) = new ErrorException(status, message)
