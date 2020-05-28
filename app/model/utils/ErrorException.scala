@@ -34,7 +34,7 @@ object ErrorException {
   def apply(status: Int, message: String) = new ErrorException(status, message)
 
   private def extractJsErrorMessage(jsErrors: JsError): collection.Seq[String] = jsErrors.errors.map {
-    case (path, validationErrors) => path.path.foldLeft("")((acc, p) => acc + p.toJsonString).drop(1) + ": " + validationErrors.map(_.message).mkString("")
+    case (path, validationErrors) => path.path.foldLeft("")((acc, p) => acc + p.toJsonString).drop(1) + " : " + validationErrors.map(_.message).mkString("")
   }
 
   def fromThrowable(status: Int): PartialFunction[Throwable, ErrorException] = {

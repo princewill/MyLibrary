@@ -17,7 +17,7 @@ class MyBookSpec extends BaseSpec {
   trait MyBookFixture extends Scope {
 
     val myBookController: MyBook = app.injector.instanceOf[MyBook]
-    implicit val ec: ExecutionContext = controllerComponents.executionContext
+    implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
     val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   }
