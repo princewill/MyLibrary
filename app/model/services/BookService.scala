@@ -1,11 +1,11 @@
 package model.services
 
+import controllers.{Book, Books}
 import javax.inject.Inject
-import model.{Book, BookId, Books}
+import model.BookId
 import model.dao.BookDAO
 import model.utils.{DatabaseExecutionContext, ErrorException}
-
-import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 
 import scala.concurrent.Future
 
@@ -19,7 +19,7 @@ trait BookService {
 
   def deleteBook(id: BookId): Future[String]
 
-  //def updateBook(book: Book): Future[Book]
+  def updateBook(book: Book): Future[BookId]
 
   //def deleteAll(ids: List[BookTitle]): Future[Ack]
 
@@ -27,22 +27,50 @@ trait BookService {
 
 class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: DatabaseExecutionContext) extends BookService {
 
-  def addBook(book: Book): Future[BookId] = bookDAO.save(book)
+  def addBook(book: Book): Future[BookId] =
+    checkForExists(book) {
+      bookDAO.insertOrUpdate(_).recoverWith {
+        case ex => Future.failed(ErrorException.fromThrowable(INTERNAL_SERVER_ERROR)(ex))
+      }
+    }
 
-  def getBooks: Future[Books] =
-    bookDAO.getAll.map(_.map(Book(_)))
+  def getBooks: Future[Books] = bookDAO.findAll.map(_.map(Book.fromDbBook))
 
   def getBook(id: BookId): Future[Book] =
     bookDAO.findById(id).map {
-      case Some(dbBook) => Book(dbBook)
-      case _ => throw ErrorException(NOT_FOUND, "Book Does Not Exist!")
+        case Some(dbBook) => Book.fromDbBook(dbBook)
+        case _ => throw ErrorException(NOT_FOUND, "Book Does Not Exist!")
     }
 
-  def deleteBook(id: BookId): Future[String] = bookDAO.delete(id)
+  def deleteBook(id: BookId): Future[String] =
+    checkForNonExists(id) {
+      bookDAO.deleteById(_).map(_ => "Book has been deleted successfully!").recoverWith {
+        case ex => Future.failed(ErrorException.fromThrowable(INTERNAL_SERVER_ERROR)(ex))
+      }
+    }
+
+  def updateBook(book: Book): Future[BookId] =
+    checkForNonExists(book.id){ _ =>
+      bookDAO.insertOrUpdate(book)
+    }
+
+  private def checkForExists(book: Book)(fe: Book => Future[String]): Future[String] = {
+    bookDAO.findByTitle(book.bookInfo.title).flatMap {
+      case Some(_) => Future.failed(ErrorException(BAD_REQUEST, "Book Already Exists!"))
+      case _ => fe(book)
+    }
+  }
+
+  private def checkForNonExists(bookId: BookId)(fe: BookId => Future[String]): Future[String] = {
+    bookDAO.findById(bookId).flatMap {
+      case None => Future.failed(ErrorException(NOT_FOUND, "Book Does Not Exist!"))
+      case _ => fe(bookId)
+    }
+  }
 
   /*
   def deleteAll(ids: List[BookTitle]): Future[Ack]
-  def updateBook(book: Book): Future[Book]
+
 */
 
 }

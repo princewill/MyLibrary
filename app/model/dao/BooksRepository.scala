@@ -1,3 +1,4 @@
+/*
 package model.dao
 
 import controllers.BookInfo
@@ -26,3 +27,4 @@ class StaticBooksRepositoryImpl @Inject()(implicit val ec: ExecutionContext) ext
   }
 
 }
+*/
