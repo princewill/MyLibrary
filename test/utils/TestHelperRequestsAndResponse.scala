@@ -11,6 +11,19 @@ trait TestHelperRequestsAndResponse {
       "isAudioBook"-> false
     )
 
+  val updateBookRequest: String => JsObject = (id: String) =>
+    Json.obj(
+      "id" -> id,
+      "bookDetails" ->
+        Json.obj(
+          "bookTitle" -> "Lord of the Rings",
+          "bookAuthor" -> "J. R. R. Tolkien",
+          "bookGenre" -> "fantasy",
+          "isAudioBook"-> false
+        )
+    )
+
+
   val addBookErrorResponse: JsObject =
     Json.obj(
       "fail" -> "Book Already Exists!",
