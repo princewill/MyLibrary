@@ -27,7 +27,7 @@ class MyBookSpec extends BaseSpec {
 
     "return 200 OK when book does not already exist in DB" in new MyBookFixture {
 
-      val postReq: FakeRequest[BookInfo] = req.withT(Json.stringify(addBookRequest))
+      val postReq: FakeRequest[BookInfo] = req.withT[BookInfo](Json.stringify(addBookRequest))
       val result: Future[Result] = myBookController.addBook()(postReq)
 
       status(result) must beEqualTo(OK)
@@ -35,7 +35,7 @@ class MyBookSpec extends BaseSpec {
 
     "return 400 BadRequest when book already exist in DB" in new MyBookFixture {
 
-      val postReq: FakeRequest[BookInfo] = req.withT(Json.stringify(addBookRequest))
+      val postReq: FakeRequest[BookInfo] = req.withT[BookInfo](Json.stringify(addBookRequest))
       val result: Future[Result] = myBookController.addBook()(postReq)
 
       contentAsJson(result) must beEqualTo(addBookErrorResponse)
@@ -44,7 +44,7 @@ class MyBookSpec extends BaseSpec {
 
     "throw an ErrorException when bad post request" in new MyBookFixture {
 
-      req.withT(Json.stringify(Json.obj())) must throwA[ErrorException].like {
+      req.withT[BookInfo](Json.stringify(Json.obj())) must throwA[ErrorException].like {
         case error: ErrorException => (error.toJson \ "fail").as[String] must beEqualTo("Invalid JSON POST Data")
       }
 
@@ -85,6 +85,19 @@ class MyBookSpec extends BaseSpec {
     }
   }
 
+  "updateBook" should {
+    "return 200 Ok when book is successfully updated" in new MyBookFixture {
+      val getBooksResult: JsValue = contentAsJson(myBookController.getBooks()(req)).as[List[JsValue]].head
+      val id: String = (getBooksResult \ "id").as[String]
+      val _req: FakeRequest[Book] = req.withT[Book](Json.stringify(updateBookRequest(id)))
+      val result: Future[Result] = myBookController.updateBook()(_req)
+
+      contentAsJson(result) must beEqualTo(JsString(id))
+      status(result) must beEqualTo(OK)
+
+    }
+  }
+
   "deleteBook" should {
 
     "return 404 Not Found when book does not exist in DB" in new MyBookFixture {
@@ -101,7 +114,7 @@ class MyBookSpec extends BaseSpec {
       val id: String = (getBooksResult \ "id").as[String]
       val result: Future[Result] = myBookController.deleteBook(id)(req)
 
-      contentAsString(result) must beEqualTo("Book has been deleted successfully!")
+      contentAsJson(result) must beEqualTo(JsString("Book has been deleted successfully!"))
       status(result) must beEqualTo(OK)
     }
 
