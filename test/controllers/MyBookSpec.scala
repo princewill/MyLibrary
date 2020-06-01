@@ -94,7 +94,13 @@ class MyBookSpec extends BaseSpec {
 
       contentAsJson(result) must beEqualTo(JsString(id))
       status(result) must beEqualTo(OK)
+    }
+    "return 404 Not Found when book does not exist in DB" in new MyBookFixture {
+      val _req: FakeRequest[Book] = req.withT[Book](Json.stringify(updateBookRequest("id")))
+      val result: Future[Result] = myBookController.updateBook()(_req)
 
+      contentAsJson(result) must beEqualTo(getBookErrorResponse)
+      status(result) must beEqualTo(NOT_FOUND)
     }
   }
 

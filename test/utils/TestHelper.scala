@@ -12,8 +12,8 @@ object TestHelper extends TestHelperRequestsAndResponse {
       def withT[T](json: String)(implicit reads: Reads[T]): FakeRequest[T] = {
         val jsonObj = Json.parse(json)
         val body = jsonObj.validate[T] match {
-          case jsError: JsError    => throw ErrorException(400, jsError)
-          case value => value.get
+          case jsError: JsError => throw ErrorException(400, jsError)
+          case value            => value.get
         }
         fakeRequest.withBody(body).withHeaders(HeaderNames.CONTENT_TYPE -> MimeTypes.JSON)
       }
