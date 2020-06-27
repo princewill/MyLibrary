@@ -2,7 +2,7 @@ package utils
 
 import model.utils.ErrorException
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{JsError, JsObject, JsSuccess, Json, Reads}
+import play.api.libs.json.{JsError, Json, Reads}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 
