@@ -8,13 +8,15 @@ import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, R
 
 import scala.concurrent.{ExecutionContext, Future}
 import model.services.BookService
+import model.services.googleBooks.GoogleBooksService
 import model.utils.ErrorException
 import play.api.http.MimeTypes
 
 
 @Singleton
 class MyBook @Inject()(
-  bookService: BookService
+  bookService: BookService,
+  googleBooksService: GoogleBooksService
 )(implicit val ec: ExecutionContext,
   val controllerComponents: ControllerComponents
 ) extends BaseController with ControllerHelper {
@@ -24,11 +26,16 @@ class MyBook @Inject()(
 
   def addBook(): Action[BookInfo] = Action.async(jsonBodyParser[BookInfo]) { implicit request =>
     val bookInfo = request.body
-    val book = Book(UUID.randomUUID().toString, bookInfo)
 
-    bookService
-      .addBook(book)
-      .map(resultWrapper).recoverWith {
+    val rr =
+      for {
+        response <- googleBooksService.getVolume(bookInfo.title)
+        resp <- {
+          val _bookInfo = bookInfo.copy(title = response.title, author = response.author)
+          bookService.addBook(Book(UUID.randomUUID().toString, _bookInfo))
+        }} yield resp
+
+      rr.map(resultWrapper).recoverWith {
       case ex: ErrorException => Future.successful(BadRequest(ex.toJson))
     }
   }
