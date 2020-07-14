@@ -7,5 +7,8 @@ An example app, using Play Framework 2.7, Slick 3.3, that enables user to record
 - It shows how to handle situations where various database operations have to be performed within a single transaction.
 - Easy to read and understand
 
+## Updates:
+- Added Google books to help increase result correctness
+
 Run sbt ~run for continuous recompilation of the server app.
 Done: http://localhost:9000/
