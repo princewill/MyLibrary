@@ -25,6 +25,8 @@ trait BookDAO {
 
   def deleteById(id: BookId): Future[Int]
 
+  def deleteAll(): Future[Int]
+
 }
 
 class BookDAOImpl @Inject()(
@@ -42,6 +44,7 @@ class BookDAOImpl @Inject()(
 
   def deleteById(bookId: BookId): Future[Int] = db.run(ById(bookId).delete)
 
+  def deleteAll: Future[Int] = db.run(BookTable.delete)
 
 }
 
