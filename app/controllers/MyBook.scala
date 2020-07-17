@@ -49,8 +49,9 @@ class MyBook @Inject()(
   def getBook(bookId: String): Action[AnyContent] = Action.async { implicit request =>
     bookService
       .getBook(bookId)
-      .map(resultWrapper).recoverWith {
-      case ex: ErrorException => Future.successful(NotFound(ex.toJson))
+      .map(resultWrapper)
+      .recoverWith {
+        case ex: ErrorException => Future.successful(NotFound(ex.toJson))
     }
   }
 
@@ -60,6 +61,12 @@ class MyBook @Inject()(
       .map(resultWrapper).recoverWith {
       case ex: ErrorException => Future.successful(NotFound(ex.toJson))
     }
+  }
+
+  def deleteAll(): Action[AnyContent] = Action.async { implicit request =>
+    bookService
+      .deleteAll()
+      .map(resultWrapper)
   }
 
   def updateBook(): Action[Book] = Action.async(jsonBodyParser[Book]) { implicit request =>

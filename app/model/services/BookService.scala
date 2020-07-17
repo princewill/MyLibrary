@@ -21,7 +21,7 @@ trait BookService {
 
   def updateBook(book: Book): Future[BookId]
 
-  //def deleteAll(ids: List[BookTitle]): Future[Ack]
+  def deleteAll(): Future[String]
 
 }
 
@@ -54,6 +54,12 @@ class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: DatabaseExecution
       bookDAO.insertOrUpdate(book)
     }
 
+  def deleteAll(): Future[String] =
+    bookDAO.deleteAll().map(_ => "All Books have been Deleted!").recoverWith {
+      case ex => Future.failed(ErrorException.fromThrowable(INTERNAL_SERVER_ERROR)(ex))
+    }
+
+
   private def checkForExists(book: Book)(fe: Book => Future[String]): Future[String] = {
     bookDAO.findByTitle(book.bookInfo.title).flatMap {
       case Some(_) => Future.failed(ErrorException(BAD_REQUEST, "Book Already Exists!"))
@@ -67,10 +73,5 @@ class BookServiceImpl @Inject()(bookDAO: BookDAO)(implicit ec: DatabaseExecution
       case _ => fe(bookId)
     }
   }
-
-  /*
-  def deleteAll(ids: List[BookTitle]): Future[Ack]
-
-*/
 
 }
