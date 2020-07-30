@@ -84,7 +84,7 @@ object MyBook {
   private def resultWrapper[T](implicit myBook: MyBook, writes: play.api.libs.json.Writes[T]): T => Result =
     (value: T) => myBook.Ok(Json.toJson(value)).as(MimeTypes.JSON)
 
-  /*private def errorResultWrapper[T](implicit myBook: MyBook): ErrorException => Future[Result] = (ex: ErrorException) =>
-    Future.successful(myBook.NotFound(ex.toJson))*/
+  private def errorResultWrapper[T](implicit myBook: MyBook): ErrorException => Future[Result] = (ex: ErrorException) =>
+    Future.successful(myBook.NotFound(ex.toJson))
 
 }

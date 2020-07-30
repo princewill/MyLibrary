@@ -13,8 +13,6 @@ package object controllers {
 
   object BookInfo {
 
-    //TODO: create helper to remove white space from title and lowercase
-
     implicit val reads: Reads[BookInfo] = (
       (__ \ "bookTitle").read[BookTitle](JsonReadsHelpers.NonEmptyString) and
         (__ \ "bookAuthor").read[String](JsonReadsHelpers.NonEmptyString) and
